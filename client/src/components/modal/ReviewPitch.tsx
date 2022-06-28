@@ -62,6 +62,8 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
   );
   const [pitchIssues, setPitchIssues] = useState<string[]>([]);
   const [reasoning, setReasoning] = useState('');
+  const [wordCount, setWordCount] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
 
   useEffect(() => {
     const loadData = async (): Promise<void> => {
@@ -118,6 +120,8 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
       neighborhoods: pitchNeighborhoods,
       teams: parsedTeams,
       deadline: new Date(deadline),
+      wordCount: wordCount,
+      pageCount: pageCount,
       issueStatuses: pitchIssues
         .map((issueId) => ({
           issueId,
@@ -372,6 +376,31 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
                   </div>
                 </div>
               ))}
+          </div>
+        </div>
+        <div className="section">
+          <div>
+            <p>
+              <b>Word Count</b>
+            </p>
+            <Input
+              type="number"
+              value={wordCount}
+              step="50"
+              min={0}
+              onChange={(e, { value }) => setWordCount(parseInt(value))}
+            />
+          </div>
+          <div>
+            <p>
+              <b>Page Count</b>
+            </p>
+            <Input
+              type="number"
+              value={pageCount}
+              min={0}
+              onChange={(e, { value }) => setPageCount(parseInt(value))}
+            />
           </div>
         </div>
         <div className="section" id="date-issue-selector">

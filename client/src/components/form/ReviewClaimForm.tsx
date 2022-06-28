@@ -38,6 +38,8 @@ interface FormData
     | 'topics'
     | 'assignmentGoogleDocLink'
     | 'description'
+    | 'wordCount'
+    | 'pageCount'
   > {
   issueStatuses: FullPopulatedPitch['issueStatuses'];
   deadline: string;
@@ -49,6 +51,8 @@ const fields: (keyof FormData)[] = [
   'topics',
   'assignmentGoogleDocLink',
   'description',
+  'wordCount',
+  'pageCount',
   'deadline',
   'issueStatuses',
 ];
@@ -247,6 +251,30 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 />
               </div>
             </Form>
+
+            <div className="row">
+              <div className="left-col">
+                <FastField
+                  component={FormInput}
+                  name="wordCount"
+                  label="Word Count"
+                  type="number"
+                  min="0"
+                  step="50"
+                  editable={editMode}
+                />
+              </div>
+              <div className="right-col">
+                <FastField
+                  component={FormInput}
+                  name="pageCount"
+                  label="Page Count"
+                  type="number"
+                  min="0"
+                  editable={editMode}
+                />
+              </div>
+            </div>
 
             <div className={editMode ? 'column' : 'row'}>
               <div className={editMode ? 'issue-column' : 'left-col'}>
