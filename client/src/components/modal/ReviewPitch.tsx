@@ -378,8 +378,8 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
               ))}
           </div>
         </div>
-        <div className="section">
-          <div>
+        <div className="section" id="page-word-count">
+          <div id="word-count">
             <p>
               <b>Word Count</b>
             </p>
@@ -388,6 +388,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
               value={wordCount}
               step="50"
               min={0}
+              style={{ width: '100px' }}
               onChange={(e, { value }) => setWordCount(parseInt(value))}
             />
           </div>
@@ -399,7 +400,9 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
               type="number"
               value={pageCount}
               min={0}
-              onChange={(e, { value }) => setPageCount(parseInt(value))}
+              step="0.5"
+              style={{ width: '100px' }}
+              onChange={(e, { value }) => setPageCount(parseFloat(value))}
             />
           </div>
         </div>

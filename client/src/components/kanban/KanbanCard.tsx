@@ -35,7 +35,7 @@ const KanbanCard: FC<PitchProps> = ({ pitch, ...rest }): ReactElement => {
         </p>
       </div>
       <p className="pitch-text">
-        Page Count: {pitch.pageCount ? pitch.pageCount : 'N/A'}
+        Page Count: {pitch.pageCount ? pitch.pageCount : 'NA'}
       </p>
     </Card>
   );

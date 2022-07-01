@@ -271,6 +271,7 @@ export const ReviewClaimForm: FC<FormProps> = ({
                   label="Page Count"
                   type="number"
                   min="0"
+                  step="0.5"
                   editable={editMode}
                 />
               </div>
