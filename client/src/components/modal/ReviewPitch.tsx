@@ -243,7 +243,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
             <h2>{pitch?.title}</h2>
           </div>
           <div>
-            <LinkDisplay href={pitch?.assignmentGoogleDocLink || ''} />
+            <LinkDisplay href={pitch.assignmentGoogleDocLink} />
           </div>
         </div>
 
