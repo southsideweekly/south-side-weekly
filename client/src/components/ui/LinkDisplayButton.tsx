@@ -13,7 +13,7 @@ export const LinkDisplay: FC<LinkDisplayProps> = ({ href, ...rest }) => {
   return hasLink ? (
     <p id="no-link">
       <Icon name="linkify" />
-      Google Doc Link not Provided
+      Link not Provided
     </p>
   ) : (
     <a {...rest} href={href} className="link-display-link">
