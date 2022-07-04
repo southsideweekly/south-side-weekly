@@ -1,6 +1,7 @@
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
 import { Icon } from 'semantic-ui-react';
 import { PopulatedIssue } from 'ssw-common';
+import { useQueryParams, NumberParam } from 'use-query-params';
 
 import { isError, apiCall } from '../api';
 import { Kanban } from '../components';
@@ -17,6 +18,7 @@ const Issues = (): ReactElement => {
   const [issues, setIssues] = useState<PopulatedIssue[] | null>(null);
   const [viewIssueIndex, setViewIssueIndex] = useState<number>(0);
   const { isAdmin } = useAuth();
+  const [query, setQuery] = useQueryParams({ index: NumberParam });
 
   const fetchIssues = useCallback(async (): Promise<void> => {
     const res = await apiCall<{ data: PopulatedIssue[]; count: number }>({
@@ -37,10 +39,14 @@ const Issues = (): ReactElement => {
         (issue) => new Date() >= new Date(issue.releaseDate),
       );
 
-      if (closestIssueIndex < 0) {
-        setViewIssueIndex(allIssues.length - 1);
+      if (query.index === undefined) {
+        if (closestIssueIndex < 0) {
+          setViewIssueIndex(allIssues.length - 1);
+        } else {
+          setViewIssueIndex(closestIssueIndex);
+        }
       } else {
-        setViewIssueIndex(closestIssueIndex);
+        setViewIssueIndex(query.index || 0);
       }
 
       setIssues(allIssues);
@@ -48,6 +54,10 @@ const Issues = (): ReactElement => {
       setIssues([]);
     }
   }, []);
+
+  useEffect(() => {
+    setQuery({ index: viewIssueIndex });
+  }, [setQuery, viewIssueIndex]);
 
   useEffect(() => {
     fetchIssues();
