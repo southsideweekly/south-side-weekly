@@ -56,10 +56,6 @@ const Issues = (): ReactElement => {
   }, []);
 
   useEffect(() => {
-    setQuery({ index: viewIssueIndex });
-  }, [setQuery, viewIssueIndex]);
-
-  useEffect(() => {
     fetchIssues();
   }, [fetchIssues]);
 
@@ -99,11 +95,13 @@ const Issues = (): ReactElement => {
               value: issue._id,
             }))}
             value={issues[viewIssueIndex] ? issues[viewIssueIndex]._id : ''}
-            onChange={(e) =>
-              setViewIssueIndex(
-                issues.findIndex((issue) => issue._id === e?.value),
-              )
-            }
+            onChange={(e) => {
+              const newIndex = issues.findIndex(
+                (issue) => issue._id === e?.value,
+              );
+              setViewIssueIndex(newIndex);
+              setQuery({ index: newIndex });
+            }}
             isClearable={false}
           />
 
