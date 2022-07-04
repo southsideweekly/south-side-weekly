@@ -15,7 +15,7 @@ import {
 } from 'ssw-common';
 import { Grid, Pagination, Rating, SemanticWIDTHS } from 'semantic-ui-react';
 import _ from 'lodash';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import { loadFullUser, loadUserPermissions } from '../api/apiWrapper';
 import { FieldTag, UserPicture } from '../components';
@@ -32,6 +32,7 @@ import { parseOptionsSelect } from '../utils/helpers';
 import Loading from '../components/ui/Loading';
 import { pitchStatusCol } from '../components/table/columns';
 import { pitchStatusEnum } from '../utils/enums';
+import { RadioFilter } from '../components/filter/RadioFilter';
 
 import './Profile.scss';
 
@@ -54,6 +55,7 @@ const Profile = (): ReactElement => {
     offset: StringParam,
     f_limit: StringParam,
     f_offset: StringParam,
+    isPublished: BooleanParam
   });
   const [user, setUser] = useState<BasePopulatedUser>();
   const [pitchesData, setPitchesData] = useState<PitchesRes>();
@@ -119,6 +121,7 @@ const Profile = (): ReactElement => {
     const q = {
       limit: params.get('f_limit') || '10',
       offset: params.get('f_offset') || '0',
+      isPublished: params.get('isPublished'),
     };
 
     return _.omitBy(q, _.isNil);
@@ -392,6 +395,17 @@ const Profile = (): ReactElement => {
         ) : (
           <h2>{`${user.firstName}'s` + ` Contributions`}</h2>
         )}
+        <RadioFilter
+          className="published-checkbox"
+          label="Published"
+          filterKey="isPublished"
+        />
+        <RadioFilter
+          className="published-checkbox"
+          label="Not Published"
+          value="false"
+          filterKey="isPublished"
+        />
 
         <PaginatedTable
           columns={cols}
