@@ -17,8 +17,8 @@ import './Issues.scss';
 const Issues = (): ReactElement => {
   const [issues, setIssues] = useState<PopulatedIssue[] | null>(null);
   const [viewIssueIndex, setViewIssueIndex] = useState<number>(0);
-  const { isAdmin } = useAuth();
   const [query, setQuery] = useQueryParams({ index: NumberParam });
+  const { isAdmin } = useAuth();
 
   const fetchIssues = useCallback(async (): Promise<void> => {
     const res = await apiCall<{ data: PopulatedIssue[]; count: number }>({
@@ -35,16 +35,13 @@ const Issues = (): ReactElement => {
           new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime(),
       );
 
-      const closestIssueIndex = allIssues.findIndex(
-        (issue) => new Date() >= new Date(issue.releaseDate),
-      );
-
       if (query.index === undefined) {
-        if (closestIssueIndex < 0) {
-          setViewIssueIndex(allIssues.length - 1);
-        } else {
-          setViewIssueIndex(closestIssueIndex);
-        }
+        const closestIssueIndex = allIssues.findIndex(
+          (issue) => new Date() >= new Date(issue.releaseDate),
+        );
+        setViewIssueIndex(
+          closestIssueIndex < 0 ? allIssues.length - 1 : closestIssueIndex,
+        );
       } else {
         setViewIssueIndex(query.index || 0);
       }
@@ -53,7 +50,7 @@ const Issues = (): ReactElement => {
     } else {
       setIssues([]);
     }
-  }, []);
+  }, [query.index]);
 
   useEffect(() => {
     fetchIssues();
