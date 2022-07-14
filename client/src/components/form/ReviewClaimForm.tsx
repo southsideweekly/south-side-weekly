@@ -264,7 +264,7 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 {!editMode ? (
                   <>
                     <b>Word Count</b>
-                    <p>{values.wordCount ? values.wordCount : 'NA'}</p>
+                    <p>{values.wordCount ? values.wordCount : 'na'}</p>
                   </>
                 ) : (
                   <FastField
