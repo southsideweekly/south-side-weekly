@@ -108,6 +108,7 @@ const Profile = (): ReactElement => {
       offset: params.get('offset') || '0',
       sortBy: params.get('sortBy'),
       orderBy: params.get('orderBy'),
+      isPublished: params.get('isPublished'),
     };
 
     return _.omitBy(q, _.isNil);
@@ -121,7 +122,6 @@ const Profile = (): ReactElement => {
     const q = {
       limit: params.get('f_limit') || '10',
       offset: params.get('f_offset') || '0',
-      isPublished: params.get('isPublished'),
     };
 
     return _.omitBy(q, _.isNil);
@@ -161,7 +161,6 @@ const Profile = (): ReactElement => {
     if (!user) {
       return;
     }
-
     loadPitches();
   }, [queryParams, user]);
 
