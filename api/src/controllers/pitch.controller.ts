@@ -96,7 +96,7 @@ export const getApprovedPitches = async (
   const options = extractOptions(req.query);
 
   const pitches = await PitchService.getApprovedPitches(
-    req.user.role === rolesEnum.ADMIN,
+    req.user.role === rolesEnum.ADMIN || req.user.role === rolesEnum.STAFF,
     options,
   );
 

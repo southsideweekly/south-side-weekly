@@ -1,4 +1,10 @@
-import { FastField, Form as FormikForm, Formik, FormikHelpers } from 'formik';
+import {
+  FastField,
+  Field,
+  Form as FormikForm,
+  Formik,
+  FormikHelpers,
+} from 'formik';
 import { cloneDeep, difference, lowerCase, pick, startCase } from 'lodash';
 import React, { FC, ReactElement, useState, useEffect } from 'react';
 import { MultiValue } from 'react-select';
@@ -21,8 +27,10 @@ import { FormTextArea } from '../ui/FormTextArea';
 import { LinkDisplay } from '../ui/LinkDisplayButton';
 import { PrimaryButton } from '../ui/PrimaryButton';
 import { SecondaryButton } from '../ui/SecondaryButton';
+import { InternalDisplay } from '../ui/InternalDisplay';
 import { AuthView } from '../wrapper/AuthView';
 import './ReviewClaimForm.scss';
+import { FormCheckbox } from '../ui/FormCheckbox';
 
 interface FormProps {
   pitch: FullPopulatedPitch | null;
@@ -40,6 +48,7 @@ interface FormData
     | 'description'
     | 'wordCount'
     | 'pageCount'
+    | 'isInternal'
   > {
   issueStatuses: FullPopulatedPitch['issueStatuses'];
   deadline: string;
@@ -55,6 +64,7 @@ const fields: (keyof FormData)[] = [
   'pageCount',
   'deadline',
   'issueStatuses',
+  'isInternal',
 ];
 
 export const ReviewClaimForm: FC<FormProps> = ({
@@ -382,6 +392,15 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 />
               </div>
             </div>
+            <div className="row">
+              {editMode && (
+                <Field
+                  component={FormCheckbox}
+                  name="isInternal"
+                  label="Is Internal"
+                />
+              )}
+            </div>
             {editMode && (
               <div className="row right">
                 <Button
@@ -399,6 +418,9 @@ export const ReviewClaimForm: FC<FormProps> = ({
                   content="Save"
                 />
               </div>
+            )}
+            {!editMode && pitch.isInternal && (
+              <InternalDisplay></InternalDisplay>
             )}
           </div>
         </FormikForm>

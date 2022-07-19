@@ -271,7 +271,7 @@ export const googleDocColumn = configureColumn<
 >({
   id: 'assignmentGoogleDocLink',
   title: 'Google Doc',
-  width: 2,
+  width: 1,
   extractor: function getGoogleDoc(pitch) {
     return (
       <LinkDisplay

@@ -119,9 +119,12 @@ const claimablePitchesFilter = (
   const isEditor = user.teams.some(
     (team) => team.name.toLowerCase() === 'editing',
   );
-  const canViewInternal = user.role !== rolesEnum.ADMIN;
+  const canViewInternal =
+    user.role === rolesEnum.ADMIN || user.role === rolesEnum.STAFF;
 
-  const internalQuery = canViewInternal ? [{ isInternal: { $eq: false } }] : [];
+  const internalQuery = !canViewInternal
+    ? [{ isInternal: { $eq: false } }]
+    : [];
 
   const editorQuery = isEditor
     ? [
@@ -724,12 +727,19 @@ export const getCurrentPitches = async (
 };
 
 export const getAllUserPitches = async (
+  canViewInternal: boolean,
   userId: string,
   options?: PaginateOptions<PitchSchema>,
 ): Promise<{
   data: LeanDocument<PitchSchema>[];
   count: number;
-}> => await paginate({ ...userOnPitchFilters(userId) }, options);
+}> =>
+  await paginate(
+    !canViewInternal
+      ? { ...userOnPitchFilters(userId), isInternal: false }
+      : { ...userOnPitchFilters(userId) },
+    options,
+  );
 
 export const isWriterOrEditor = (writer: string, editor: string): boolean =>
   editor === editorTypeEnum.PRIMARY ||
