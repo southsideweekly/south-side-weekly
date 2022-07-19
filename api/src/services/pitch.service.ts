@@ -254,9 +254,15 @@ export const getPendingPitches = async (
   await paginate({ status: pitchStatusEnum.PENDING }, options);
 
 export const getApprovedPitches = async (
+  isInternal: boolean,
   options?: PaginateOptions<PitchSchema>,
 ): Promise<PitchesResponse> =>
-  await paginate({ status: pitchStatusEnum.APPROVED }, options);
+  await paginate(
+    !isInternal
+      ? { status: pitchStatusEnum.APPROVED, isInternal: false }
+      : { status: pitchStatusEnum.APPROVED },
+    options,
+  );
 
 export const getPendingClaimPitches = async (
   options?: PaginateOptions<PitchSchema>,

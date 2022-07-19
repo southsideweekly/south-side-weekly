@@ -4,7 +4,7 @@ import { BasePopulatedPitch, Pitch } from 'ssw-common';
 import { populatePitch } from '../populators';
 import { PitchService, TeamService, UserService } from '../services';
 import { isWriterOrEditor } from '../services/pitch.service';
-import { editorTypeEnum, pitchStatusEnum } from '../utils/enums';
+import { editorTypeEnum, pitchStatusEnum, rolesEnum } from '../utils/enums';
 import { sendFail, sendNotFound, sendSuccess } from '../utils/helpers';
 import { extractOptions, extractPopulateQuery } from './utils';
 
@@ -85,17 +85,20 @@ export const getPendingPitches = async (
   });
 };
 
-type GetApprovedPitchesReqQuery = { status: string };
-type GetApprovedPitchesReq = Request<never, never, GetApprovedPitchesReqQuery>;
+// type GetApprovedPitchesReqQuery = { status: string };
+// type GetApprovedPitchesReq = Request<never, never, GetApprovedPitchesReqQuery>;
 
 export const getApprovedPitches = async (
-  req: GetApprovedPitchesReq,
+  req: Request,
   res: Response,
 ): Promise<void> => {
   const populateType = extractPopulateQuery(req.query);
   const options = extractOptions(req.query);
 
-  const pitches = await PitchService.getApprovedPitches(options);
+  const pitches = await PitchService.getApprovedPitches(
+    req.user.role === rolesEnum.ADMIN,
+    options,
+  );
 
   sendSuccess(res, 'Successfully retrieved all approved pitches', {
     data: await populatePitch(pitches.data, populateType),
