@@ -190,6 +190,15 @@ export const titleColumn = configureColumn({
   sortable: true,
 });
 
+export const internalColumn = configureColumn<Pick<Pitch, 'isInternal'>>({
+  id: 'isInternal',
+  title: 'Visibility',
+  width: 1,
+  extractor: function getVIsibility(pitch) {
+    return <div>{pitch.isInternal ? <>Internal</> : <></>}</div>;
+  },
+});
+
 export const descriptionColumn = configureColumn<Pick<Pitch, 'description'>>({
   id: 'description',
   title: 'Description',

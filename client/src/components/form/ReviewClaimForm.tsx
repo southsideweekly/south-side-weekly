@@ -419,9 +419,7 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 />
               </div>
             )}
-            {!editMode && pitch.isInternal && (
-              <InternalDisplay></InternalDisplay>
-            )}
+            {!editMode && pitch.isInternal && <InternalDisplay />}
           </div>
         </FormikForm>
       )}

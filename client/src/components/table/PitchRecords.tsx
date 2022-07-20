@@ -17,6 +17,7 @@ import {
   unclaimedTeamsColumn,
   deadlineColumn,
   claimedPitchStatusColumn,
+  internalColumn,
 } from './columns';
 import { PaginatedTable } from './dynamic/PaginatedTable';
 
@@ -26,6 +27,7 @@ const reviewCols = [
   submittedColumn,
   selfWriteColumn,
   googleDocColumn,
+  internalColumn,
 ];
 
 const reviewUnclaimedCols = [

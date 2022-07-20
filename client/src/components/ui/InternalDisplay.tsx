@@ -1,9 +1,9 @@
 import React, { FC, ReactElement } from 'react';
-import { Icon } from 'semantic-ui-react';
-import './InternalDisplay.scss';
+import { Message } from 'semantic-ui-react';
 
 export const InternalDisplay: FC = (): ReactElement => (
-  <p className="internal-display">
-    <Icon name="eye slash outline"></Icon>Internal Story
-  </p>
+  <Message warning>
+    {/* <Icon name="eye slash outline"></Icon> */}
+    Internal Story
+  </Message>
 );
