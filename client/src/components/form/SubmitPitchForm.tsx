@@ -9,6 +9,7 @@ import { useAuth, useInterests } from '../../contexts';
 import { FormCheckbox } from '../ui/FormCheckbox';
 import { FormRadio } from '../ui/FormRadio';
 import { FormTextArea } from '../ui/FormTextArea';
+import { AuthView } from '../wrapper/AuthView';
 
 import './SubmitPitchForm.scss';
 
@@ -44,7 +45,7 @@ export const SubmitPitchForm: FC<FormProps> = ({
   ...rest
 }): ReactElement => {
   const { interests } = useInterests();
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
 
   const isWriter = useMemo(
     () => user!.teams.findIndex((team) => team.name === 'Writing') >= 0,
@@ -113,6 +114,16 @@ export const SubmitPitchForm: FC<FormProps> = ({
             {touched['topics'] && errors['topics'] && (
               <div className="error">{errors['topics']}</div>
             )}
+            <AuthView view="minStaff">
+              <div className="row">
+                <Field
+                  component={FormCheckbox}
+                  name="isInternal"
+                  label="Is Internal"
+                />
+              </div>
+            </AuthView>
+
             {isWriter && (
               <>
                 <div className="row">
@@ -143,17 +154,6 @@ export const SubmitPitchForm: FC<FormProps> = ({
                 )}
               </>
             )}
-
-            {isAdmin && (
-              <div className="row">
-                <Field
-                  component={FormCheckbox}
-                  name="isInternal"
-                  label="Is Internal"
-                />
-              </div>
-            )}
-
             <div className="row">
               <div>
                 <p>
