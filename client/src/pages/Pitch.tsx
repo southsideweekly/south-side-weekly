@@ -205,70 +205,72 @@ const Pitch = (): ReactElement => {
   }
 
   return (
-    <div className="review-claim-page">
-      {notApproved && (
-        <Message visible className="pitch-status-message" warning>
-          {pitch.status === pitchStatusEnum.PENDING
-            ? 'This pitch is currently under review.'
-            : 'This pitch has been declined.'}
-        </Message>
-      )}
-      <div className="content">
-        <div className="form-content">
-          <ReviewClaimForm
-            pitch={pitch}
-            callback={fetchAggregatedPitch}
-            notApproved={notApproved}
-          />
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
-            {readyForFeedback && (
-              <AuthView view="minStaff">
-                <ViewPitchFeedback pitchId={pitchId} />{' '}
-              </AuthView>
-            )}
-            {readyForFeedback && workedOnPitch && (
-              <PitchFeedbackModal pitchId={pitchId} />
-            )}
+    <AuthView view={pitch.isInternal ? 'minStaff' : 'minContributor'}>
+      <div className="review-claim-page">
+        {notApproved && (
+          <Message visible className="pitch-status-message" warning>
+            {pitch.status === pitchStatusEnum.PENDING
+              ? 'This pitch is currently under review.'
+              : 'This pitch has been declined.'}
+          </Message>
+        )}
+        <div className="content">
+          <div className="form-content">
+            <ReviewClaimForm
+              pitch={pitch}
+              callback={fetchAggregatedPitch}
+              notApproved={notApproved}
+            />
+            <div style={{ display: 'flex', flexDirection: 'row' }}>
+              {readyForFeedback && (
+                <AuthView view="minStaff">
+                  <ViewPitchFeedback pitchId={pitchId} />{' '}
+                </AuthView>
+              )}
+              {readyForFeedback && workedOnPitch && (
+                <PitchFeedbackModal pitchId={pitchId} />
+              )}
+            </div>
           </div>
-        </div>
 
-        <div className="card-content">
-          {Object.entries(allContributors).map(
-            ([teamId, { pending, assignment }], idx) => {
-              if (getTeamFromId(teamId)?.name === 'Editing') {
+          <div className="card-content">
+            {Object.entries(allContributors).map(
+              ([teamId, { pending, assignment }], idx) => {
+                if (getTeamFromId(teamId)?.name === 'Editing') {
+                  return (
+                    <EditingClaimCard
+                      editors={editorContributors}
+                      pitchId={pitchId}
+                      completed={readyForFeedback}
+                      callback={fetchAggregatedPitch}
+                      team={getTeamWithTargetFromId(teamId)}
+                      pendingEditors={pendingEditors}
+                      notApproved={notApproved}
+                    />
+                  );
+                }
                 return (
-                  <EditingClaimCard
-                    editors={editorContributors}
-                    pitchId={pitchId}
-                    completed={readyForFeedback}
-                    callback={fetchAggregatedPitch}
+                  <ApproveClaimCard
+                    key={idx}
+                    pendingContributors={pending}
+                    assignmentContributors={
+                      getTeamFromId(teamId)?.name === 'Writing'
+                        ? writer
+                        : assignment
+                    }
                     team={getTeamWithTargetFromId(teamId)}
-                    pendingEditors={pendingEditors}
+                    pitchId={pitchId}
+                    callback={fetchAggregatedPitch}
+                    completed={readyForFeedback}
                     notApproved={notApproved}
                   />
                 );
-              }
-              return (
-                <ApproveClaimCard
-                  key={idx}
-                  pendingContributors={pending}
-                  assignmentContributors={
-                    getTeamFromId(teamId)?.name === 'Writing'
-                      ? writer
-                      : assignment
-                  }
-                  team={getTeamWithTargetFromId(teamId)}
-                  pitchId={pitchId}
-                  callback={fetchAggregatedPitch}
-                  completed={readyForFeedback}
-                  notApproved={notApproved}
-                />
-              );
-            },
-          )}
+              },
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </AuthView>
   );
 };
 
