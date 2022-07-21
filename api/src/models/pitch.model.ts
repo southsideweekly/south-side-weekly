@@ -108,11 +108,13 @@ const Pitch = new mongoose.Schema(
       default: visualStatusEnum.UNASSIGNED,
     },
     visualLink: { type: String, default: null },
+    visualNotes: { type: String, default: null },
     layoutStatus: {
       type: String,
       enum: Object.values(layoutStatusEnum),
       default: layoutStatusEnum.IN_PROGRESS,
     },
+    layoutNotes: { type: String, default: null },
     wordCount: { type: Number, default: null },
     pageCount: { type: Number, default: null },
   },

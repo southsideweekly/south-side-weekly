@@ -37,7 +37,9 @@ export interface Pitch {
   factCheckingLink: string;
   visualStatus: string;
   visualLink: string;
+  visualNotes: string;
   layoutStatus: string;
+  layoutNotes: string;
   wordCount: number;
   pageCount: number;
 }

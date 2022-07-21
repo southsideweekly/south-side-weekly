@@ -297,6 +297,14 @@ export const ReviewClaimForm: FC<FormProps> = ({
               </div>
             </div>
             <div className="row">
+              <FastField
+                component={FormInput}
+                name="visualNotes"
+                label="Visuals Notes"
+                editable={editMode}
+              />
+            </div>
+            <div className="row">
               <div className="left-col">
                 <FastField
                   component={FormSingleSelect}
@@ -309,6 +317,14 @@ export const ReviewClaimForm: FC<FormProps> = ({
                   editable={editMode}
                 />
               </div>
+            </div>
+            <div className="row">
+              <FastField
+                component={FormInput}
+                name="layoutNotes"
+                label="Layout Notes"
+                editable={editMode}
+              />
             </div>
             <div className="row">
               <FastField

@@ -9,8 +9,8 @@ interface LinkDisplayProps {
 }
 
 export const LinkDisplay: FC<LinkDisplayProps> = ({ href, ...rest }) => {
-  const hasLink = href === undefined || href === '';
-  return hasLink ? (
+  const missingLink = !href;
+  return missingLink ? (
     <p id="no-link">
       <Icon name="linkify" />
       Link not Provided

@@ -103,7 +103,9 @@ export interface IPitch {
   factCheckingLink: string;
   visualStatus: string;
   visualLink: string;
+  visualNotes: string;
   layoutStatus: string;
+  layoutNotes: string;
 }
 
 export interface IPitchAggregate extends IPitch {
