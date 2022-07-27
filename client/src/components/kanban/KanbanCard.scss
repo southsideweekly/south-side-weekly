@@ -10,6 +10,25 @@
   margin: 5px 0px 10px 0px !important;
   padding: 10px 2px 10px 10px !important;
 
+  .page-word-count {
+    position: relative;
+    left: 2px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    #left {
+      width: 50% !important;
+      position: relative !important;
+      float: left !important;
+    }
+    #right {
+      width: 50% !important;
+      position: relative !important;
+      float: right !important;
+    }
+  }
+
   * {
     color: black !important;
     .due-date {

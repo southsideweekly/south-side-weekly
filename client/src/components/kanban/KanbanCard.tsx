@@ -68,8 +68,13 @@ const KanbanCard: FC<PitchProps> = ({ pitch, ...rest }): ReactElement => {
           />
         </dt>
       </div>
-      <p className="pitch-text">
-        Page Count: {pitch.pageCount ? pitch.pageCount : 'NA'}
+      <p className="page-word-count">
+        <span id="left">
+          Word Count: {pitch.wordCount ? pitch.wordCount : 'NA'}
+        </span>
+        <span id="right">
+          Page Count: {pitch.pageCount ? pitch.pageCount : 'NA'}
+        </span>
       </p>
     </Card>
   );
