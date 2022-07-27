@@ -135,8 +135,8 @@ export const visualStatusEnum = {
   UNASSIGNED: 'Unassigned',
   IN_PROGRESS: 'In Progress',
   REUSE_ILLUSTRATION: 'Re-use Illustration',
-  IN_DRIVE: 'In Drive',
   UNCERTAIN: 'Uncertain',
+  IN_DRIVE: 'In Drive',
 };
 
 export const layoutStatusEnum = {

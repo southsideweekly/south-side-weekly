@@ -45,7 +45,9 @@ interface FormData
     | 'factCheckingLink'
     | 'visualStatus'
     | 'visualLink'
+    | 'visualNotes'
     | 'layoutStatus'
+    | 'layoutNotes'
     | 'topics'
     | 'assignmentGoogleDocLink'
     | 'description'
@@ -63,7 +65,9 @@ const fields: (keyof FormData)[] = [
   'factCheckingLink',
   'visualStatus',
   'visualLink',
+  'visualNotes',
   'layoutStatus',
+  'layoutNotes',
   'topics',
   'assignmentGoogleDocLink',
   'description',
@@ -296,14 +300,26 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 )}
               </div>
             </div>
-            <div className="row">
-              <FastField
-                component={FormInput}
-                name="visualNotes"
-                label="Visuals Notes"
-                editable={editMode}
-              />
-            </div>
+            {pitch.visualNotes && !editMode && (
+              <div className="row">
+                <FastField
+                  component={FormInput}
+                  name="visualNotes"
+                  label="Visuals Notes"
+                  editable={editMode}
+                />
+              </div>
+            )}
+            {editMode && (
+              <div className="row">
+                <FastField
+                  component={FormInput}
+                  name="visualNotes"
+                  label="Visuals Notes"
+                  editable={editMode}
+                />
+              </div>
+            )}
             <div className="row">
               <div className="left-col">
                 <FastField
@@ -318,14 +334,26 @@ export const ReviewClaimForm: FC<FormProps> = ({
                 />
               </div>
             </div>
-            <div className="row">
-              <FastField
-                component={FormInput}
-                name="layoutNotes"
-                label="Layout Notes"
-                editable={editMode}
-              />
-            </div>
+            {pitch.layoutNotes && !editMode && (
+              <div className="row">
+                <FastField
+                  component={FormInput}
+                  name="layoutNotes"
+                  label="Layout Notes"
+                  editable={editMode}
+                />
+              </div>
+            )}
+            {editMode && (
+              <div className="row">
+                <FastField
+                  component={FormInput}
+                  name="layoutNotes"
+                  label="Layout Notes"
+                  editable={editMode}
+                />
+              </div>
+            )}
             <div className="row">
               <FastField
                 component={FormMultiSelect}
@@ -471,6 +499,7 @@ export const ReviewClaimForm: FC<FormProps> = ({
                           {formatIssue(issueId.releaseDate, issueId.type)}
                         </p>
                         <FieldTag
+                          size="medium"
                           content={startCase(lowerCase(issueStatus))}
                           className="issue-tag"
                         />

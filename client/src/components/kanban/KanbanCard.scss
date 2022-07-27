@@ -7,11 +7,14 @@
   min-height: 65px;
   background-color: $mainBackground !important;
   height: fit-content !important;
-  margin: 10px 0px 10px 0px !important;
+  margin: 5px 0px 10px 0px !important;
   padding: 10px 2px 10px 10px !important;
 
   * {
     color: black !important;
+    .due-date {
+      color: gray !important;
+    }
   }
 
   display: flex;
@@ -25,18 +28,14 @@
   font-size: 12px;
   line-height: 25px;
 
-  .pitch-title {
-    font-weight: 600;
-  }
-
   .pitch-info {
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
     justify-content: left !important;
     width: 100%;
     position: relative;
     right: 5px;
+    left: 2px;
     top: -4px;
 
     .pitch-text {

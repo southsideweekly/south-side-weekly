@@ -52,6 +52,7 @@ export const FormSingleSelect: FC<FormSingleSelectProps> = ({
         {label && <label>{label}</label>}
         <div>
           <FieldTag
+            size="medium"
             content={field.value}
             name={field.value}
             key={field.value}
