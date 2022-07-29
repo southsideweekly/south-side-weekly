@@ -35,6 +35,7 @@ export interface Pitch {
   editStatus: string;
   wordCount: number;
   pageCount: number;
+  isInternal: boolean;
 }
 
 type BasePitchOmitFields =
@@ -69,7 +70,8 @@ export interface BasePopulatedPitch extends Omit<Pitch, BasePitchOmitFields> {
 type FullPitchOmitFields =
   | BasePitchOmitFields
   | 'issues'
-  | 'pendingContributors';
+  | 'pendingContributors'
+  | 'isInternal';
 
 export interface PendingContributor {
   userId: UserFields;
@@ -93,4 +95,5 @@ export interface FullPopulatedPitch extends Omit<Pitch, FullPitchOmitFields> {
   thirdEditors: UserFields[];
   reviewedBy: UserFields;
   issueStatuses: { issueId: Issue; issueStatus: string, releaseDate: string }[];
+  isInternal: boolean;
 }

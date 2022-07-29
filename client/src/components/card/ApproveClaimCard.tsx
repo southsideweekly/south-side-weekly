@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { FieldTag } from '..';
 import { apiCall, isError } from '../../api';
 import { useAuth } from '../../contexts';
+import { rolesEnum } from '../../utils/enums';
 import {
   extractErrorMessage,
   getUserFullName,
@@ -32,6 +33,7 @@ interface ApproveClaimCardProps {
   completed: boolean;
   notApproved: boolean;
   callback: () => Promise<void>;
+  isInternal: boolean;
 }
 
 const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
@@ -42,6 +44,7 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
   completed,
   notApproved,
   callback,
+  isInternal,
 }): ReactElement => {
   const { user } = useAuth();
   const [selectContributorMode, setSelectContributorMode] = useState(false);
@@ -273,6 +276,11 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
     [assignmentContributors, pendingContributors],
   );
 
+  const filterInternal = (contributors: User[]): User[] =>
+    contributors.filter(
+      ({ role }) => role === rolesEnum.ADMIN || role === rolesEnum.STAFF,
+    );
+
   useEffect(() => {
     const getContributorsByTeam = async (): Promise<void> => {
       const res = await apiCall<User[]>({
@@ -287,7 +295,11 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
     };
     if (selectContributorMode) {
       if (allTeamContributors) {
-        setFilteredContributors(filterContributors(allTeamContributors));
+        isInternal
+          ? setFilteredContributors(
+              filterInternal(filterContributors(allTeamContributors)),
+            )
+          : setFilteredContributors(filterContributors(allTeamContributors));
         return;
       }
       getContributorsByTeam();
@@ -299,6 +311,7 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
     team.name,
     filterContributors,
     allTeamContributors,
+    isInternal,
   ]);
 
   const renderCardHeader = (): JSX.Element => {

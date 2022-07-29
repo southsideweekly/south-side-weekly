@@ -10,6 +10,7 @@ import {
   issueStatusEnum,
   pitchStatusEnum,
   editorTypeEnum,
+  rolesEnum,
 } from '../utils/enums';
 import { PaginateOptions } from './types';
 
@@ -118,6 +119,12 @@ const claimablePitchesFilter = (
   const isEditor = user.teams.some(
     (team) => team.name.toLowerCase() === 'editing',
   );
+  const canViewInternal =
+    user.role === rolesEnum.ADMIN || user.role === rolesEnum.STAFF;
+
+  const internalQuery = !canViewInternal
+    ? [{ isInternal: { $eq: false } }]
+    : [];
 
   const editorQuery = isEditor
     ? [
@@ -128,8 +135,11 @@ const claimablePitchesFilter = (
 
   if (!isWriter) {
     return {
-      status: { $eq: pitchStatusEnum.APPROVED },
-      writer: { $ne: null },
+      $and: [
+        { status: { $eq: pitchStatusEnum.APPROVED } },
+        { writer: { $ne: null } },
+        ...internalQuery,
+      ],
       $or: [
         {
           teams: {
@@ -145,7 +155,7 @@ const claimablePitchesFilter = (
   }
 
   return {
-    status: { $eq: pitchStatusEnum.APPROVED },
+    $and: [{ status: { $eq: pitchStatusEnum.APPROVED } }, ...internalQuery],
     $or: [
       { writer: { $eq: null } },
       {
@@ -254,9 +264,15 @@ export const getPendingPitches = async (
   await paginate({ status: pitchStatusEnum.PENDING }, options);
 
 export const getApprovedPitches = async (
+  canViewInternal: boolean,
   options?: PaginateOptions<PitchSchema>,
 ): Promise<PitchesResponse> =>
-  await paginate({ status: pitchStatusEnum.APPROVED }, options);
+  await paginate(
+    !canViewInternal
+      ? { status: pitchStatusEnum.APPROVED, isInternal: false }
+      : { status: pitchStatusEnum.APPROVED },
+    options,
+  );
 
 export const getPendingClaimPitches = async (
   options?: PaginateOptions<PitchSchema>,
@@ -711,12 +727,19 @@ export const getCurrentPitches = async (
 };
 
 export const getAllUserPitches = async (
+  canViewInternal: boolean,
   userId: string,
   options?: PaginateOptions<PitchSchema>,
 ): Promise<{
   data: LeanDocument<PitchSchema>[];
   count: number;
-}> => await paginate({ ...userOnPitchFilters(userId) }, options);
+}> =>
+  await paginate(
+    !canViewInternal
+      ? { ...userOnPitchFilters(userId), isInternal: false }
+      : { ...userOnPitchFilters(userId) },
+    options,
+  );
 
 export const isWriterOrEditor = (writer: string, editor: string): boolean =>
   editor === editorTypeEnum.PRIMARY ||

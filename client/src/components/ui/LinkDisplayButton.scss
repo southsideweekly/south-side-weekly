@@ -1,7 +1,18 @@
 @import '../../styles/colors.scss';
 
-#no-link {
+.no-link {
+  display: flex;
+  align-items: center;
   opacity: 0.5;
+  font-size: 18px;
+
+  margin-left: 3px;
+
+  i {
+    font-size: 15px !important;
+    line-height: 1;
+    margin-right: 5px;
+  }
 }
 
 .link-display-link {

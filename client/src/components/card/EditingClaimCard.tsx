@@ -9,7 +9,7 @@ import { FieldTag } from '..';
 import { apiCall, isError } from '../../api';
 import { useAuth } from '../../contexts';
 import { EditorRecord, PendingEditorRecord } from '../../pages/Pitch';
-import { editorTypeEnum } from '../../utils/enums';
+import { editorTypeEnum, rolesEnum } from '../../utils/enums';
 import { extractErrorMessage, getUserFullName } from '../../utils/helpers';
 import ContributorFeedback from '../modal/ContributorFeedback';
 import { SingleSelect } from '../select/SingleSelect';
@@ -25,6 +25,7 @@ interface EditingClaimCardProps {
   team: Team & { target: number };
   callback: () => Promise<void>;
   notApproved: boolean;
+  isInternal: boolean;
 }
 
 interface SelectOption {
@@ -44,6 +45,7 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
   pendingEditors,
   notApproved,
   callback,
+  isInternal,
 }): ReactElement => {
   const { user } = useAuth();
   const [selectContributorMode, setSelectContributorMode] = useState(false);
@@ -293,6 +295,11 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
           !Object.keys(temporaryContributors).includes(_id),
       );
 
+    const filterInternal = (contributors: User[]): User[] =>
+      contributors.filter(
+        ({ role }) => role === rolesEnum.ADMIN || role === rolesEnum.STAFF,
+      );
+
     const getContributorsByTeam = async (): Promise<void> => {
       const res = await apiCall<User[]>({
         method: 'GET',
@@ -302,7 +309,11 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
       if (!isError(res)) {
         const contributors = res.data.result;
         setAllEditors(contributors);
-        setFilteredContributors(filterContributors(contributors));
+        isInternal
+          ? setFilteredContributors(
+              filterInternal(filterContributors(contributors)),
+            )
+          : setFilteredContributors(filterContributors(contributors));
       }
     };
     if (selectContributorMode) {
@@ -316,6 +327,7 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
     team.name,
     temporaryContributors,
     pendingEditors,
+    isInternal,
   ]);
 
   const numEditors = (): number =>

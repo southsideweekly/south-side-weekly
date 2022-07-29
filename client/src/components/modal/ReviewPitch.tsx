@@ -24,12 +24,12 @@ import { TagList } from '../list/TagList';
 import { SingleSelect } from '../select/SingleSelect';
 import { MultiSelect } from '../select/MultiSelect';
 import { LinkDisplay } from '../ui/LinkDisplayButton';
+import { InternalDisplay } from '../ui/InternalDisplay';
 import { Pusher } from '../ui/Pusher';
 
 import './modals.scss';
 import './ReviewPitch.scss';
 import AddIssueModal from './AddIssue';
-
 interface ReviewPitchProps extends ModalProps {
   id: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -238,8 +238,9 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
       </Modal.Header>
       <Modal.Content scrolling>
         {user!._id === pitch?.author._id && (
-          <Message info header="You are the author of this pitch" />
+          <Message info>You are the author of this pitch</Message>
         )}
+        {pitch.isInternal && <InternalDisplay />}
         <div className="flex-wrapper">
           <div id="title">
             <h2>{pitch?.title}</h2>
