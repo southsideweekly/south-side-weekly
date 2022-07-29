@@ -63,6 +63,7 @@ const Pitch = (): ReactElement => {
   const [writer, setWriter] = useState<UserFields[]>([]);
   const [workedOnPitch, setWorkedOnPitch] = useState(false);
   const [notApproved, setNotApproved] = useState(false);
+  const [isInternal, setIsInternal] = useState(false);
 
   const { teams, getTeamFromId } = useTeams();
 
@@ -108,6 +109,7 @@ const Pitch = (): ReactElement => {
       isReadyForFeedback(result.issueStatuses);
       didWorkOnPitch(result);
       setNotApproved(result.status !== pitchStatusEnum.APPROVED);
+      setIsInternal(result.isInternal);
 
       const editors: EditorRecord = {};
 
@@ -205,7 +207,7 @@ const Pitch = (): ReactElement => {
   }
 
   return (
-    <AuthView view={pitch.isInternal ? 'minStaff' : 'minContributor'}>
+    <AuthView view={isInternal ? 'minStaff' : 'minContributor'}>
       <div className="review-claim-page">
         {notApproved && (
           <Message visible className="pitch-status-message" warning>
@@ -246,6 +248,7 @@ const Pitch = (): ReactElement => {
                       team={getTeamWithTargetFromId(teamId)}
                       pendingEditors={pendingEditors}
                       notApproved={notApproved}
+                      isInternal={isInternal}
                     />
                   );
                 }
@@ -263,6 +266,7 @@ const Pitch = (): ReactElement => {
                     callback={fetchAggregatedPitch}
                     completed={readyForFeedback}
                     notApproved={notApproved}
+                    isInternal={isInternal}
                   />
                 );
               },
