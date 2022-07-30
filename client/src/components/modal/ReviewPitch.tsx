@@ -194,16 +194,18 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendPitchDeclined',
-        body: {
-          contributorId: pitch?.author._id,
-          staffId: user?._id,
-          pitchId: pitch?._id,
-          reasoning: reasoning,
-        },
-      });
+      if (notify) {
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendPitchDeclined',
+          body: {
+            contributorId: pitch?.author._id,
+            staffId: user?._id,
+            pitchId: pitch?._id,
+            reasoning: reasoning,
+          },
+        });
+      }
 
       toast.success('Pitch declined');
       setOpen(false);

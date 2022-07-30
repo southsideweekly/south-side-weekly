@@ -178,7 +178,7 @@ export const sendClaimRequestDeclinedMail = async (
 
   const mailOptions = buildSendMailOptions(
     contributor.email,
-    `Story Claim Request for “${pitch.title} Declined`,
+    `Story Claim Request for “${pitch.title}" Declined`,
     'claimRequestDeclined.html',
     templateValues,
   );
