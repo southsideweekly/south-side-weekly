@@ -154,7 +154,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
     });
 
     if (!isError(res)) {
-      if (notify) {
+      notify &&
         apiCall({
           method: 'POST',
           url: '/notifications/sendPitchApproved',
@@ -164,7 +164,8 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
             reviewerId: user?._id,
           },
         });
-        if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
+      if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
+        notify &&
           apiCall({
             method: 'POST',
             url: '/notifications/sendContributorAdded',
@@ -174,7 +175,6 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
               pitchId: pitch?._id,
             },
           });
-        }
       }
       toast.success('Pitch approved');
       setOpen(false);
@@ -194,7 +194,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
     });
 
     if (!isError(res)) {
-      if (notify) {
+      notify &&
         apiCall({
           method: 'POST',
           url: '/notifications/sendPitchDeclined',
@@ -205,7 +205,6 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
             reasoning: reasoning,
           },
         });
-      }
 
       toast.success('Pitch declined');
       setOpen(false);
