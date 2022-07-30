@@ -1,7 +1,14 @@
 import { cloneDeep, groupBy, omit } from 'lodash';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Button, Divider, Icon, Label, Popup } from 'semantic-ui-react';
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Icon,
+  Label,
+  Popup,
+} from 'semantic-ui-react';
 import { Team, User } from 'ssw-common';
 import Swal from 'sweetalert2';
 
@@ -54,6 +61,8 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
   const [allEditors, setAllEditors] = useState<User[]>([]);
   const [temporaryContributors, setTemporaryContributors] =
     useState<EditorRecord>({});
+  const [claimNotify, setClaimNotify] = useState(true);
+  const [addNotify, setAddNotify] = useState(true);
 
   const getContributorFromId = (userId: string): User | undefined =>
     allEditors.find(({ _id }) => userId === _id);
@@ -83,15 +92,16 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendClaimRequestDeclined',
-        body: {
-          contributorId: userId,
-          pitchId: pitchId,
-          staffId: user?._id,
-        },
-      });
+      claimNotify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendClaimRequestDeclined',
+          body: {
+            contributorId: userId,
+            pitchId: pitchId,
+            staffId: user?._id,
+          },
+        });
       toast.success('Declined editor claim');
     } else {
       toast.error(extractErrorMessage(res));
@@ -147,16 +157,17 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendClaimRequestApproved',
-        body: {
-          contributorId: editorId,
-          pitchId: pitchId,
-          staffId: user?._id,
-          teamId: team._id,
-        },
-      });
+      claimNotify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendClaimRequestApproved',
+          body: {
+            contributorId: editorId,
+            pitchId: pitchId,
+            staffId: user?._id,
+            teamId: team._id,
+          },
+        });
       toast.success('Approved editor claim');
     } else {
       toast.error(extractErrorMessage(res));
@@ -192,15 +203,16 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendContributorAdded',
-        body: {
-          contributorId: editorId,
-          staffId: user?._id,
-          pitchId: pitchId,
-        },
-      });
+      addNotify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendContributorAdded',
+          body: {
+            contributorId: editorId,
+            staffId: user?._id,
+            pitchId: pitchId,
+          },
+        });
       toast.success('Added editor');
     } else {
       toast.error(extractErrorMessage(res));
@@ -254,6 +266,12 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
             className="select-contributor"
           />
           <div>
+            <Checkbox
+              label="Notify Users"
+              className="notify-button"
+              defaultChecked
+              onChange={() => setAddNotify(!addNotify)}
+            ></Checkbox>
             <Button
               content="Add"
               positive
@@ -452,6 +470,11 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
                 <FieldTag content="pending" />
                 {!notApproved && (
                   <AuthView view="minStaff">
+                    <Checkbox
+                      label="Notify"
+                      onChange={() => setClaimNotify(!claimNotify)}
+                      defaultChecked
+                    ></Checkbox>
                     <SingleSelect
                       value={editorType}
                       options={editorTypeDropDownOptions}

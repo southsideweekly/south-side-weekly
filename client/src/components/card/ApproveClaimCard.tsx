@@ -64,7 +64,8 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
   const [editTargetMode, setEditTargetMode] = useState(false);
 
   const [totalPositions, setTotalPositions] = useState(0);
-  const [claimNotify, setclaimNotify] = useState(true);
+  const [claimNotify, setClaimNotify] = useState(true);
+  const [addNotify, setAddNotify] = useState(true);
 
   const addContributor = async (): Promise<void> => {
     if (selectedContributor) {
@@ -100,15 +101,16 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
       });
 
       if (!isError(res)) {
-        apiCall({
-          method: 'POST',
-          url: '/notifications/sendContributorAdded',
-          body: {
-            contributorId: selectedContributor,
-            staffId: user?._id,
-            pitchId: pitchId,
-          },
-        });
+        addNotify &&
+          apiCall({
+            method: 'POST',
+            url: '/notifications/sendContributorAdded',
+            body: {
+              contributorId: selectedContributor,
+              staffId: user?._id,
+              pitchId: pitchId,
+            },
+          });
         toast.success('Added contributor');
         setSelectContributorMode(false);
       } else {
@@ -245,6 +247,12 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
             className="select-contributor"
           />
           <div>
+            <Checkbox
+              label="Notify Users"
+              className="notify-button"
+              defaultChecked
+              onChange={() => setAddNotify(!addNotify)}
+            ></Checkbox>
             <Button
               content="Add"
               positive
@@ -412,9 +420,9 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
                 <AuthView view="minStaff">
                   <div className="button-group">
                     <Checkbox
-                      label="Notify User"
+                      label="Notify Users"
+                      onChange={() => setClaimNotify(!claimNotify)}
                       defaultChecked
-                      onChange={() => setclaimNotify(!claimNotify)}
                     ></Checkbox>
                     <Button
                       content="Approve"
