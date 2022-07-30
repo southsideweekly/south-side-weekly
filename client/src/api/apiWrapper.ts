@@ -158,6 +158,7 @@ export const loadEditors = async (): Promise<BasePopulatedUser[]> => {
 export const approveUser = async (
   user: BasePopulatedUser,
   currentUser: BasePopulatedUser | undefined,
+  notify: boolean,
 ): Promise<void> => {
   if (!currentUser) {
     return;
@@ -175,14 +176,16 @@ export const approveUser = async (
     toast.success('User approved!', {
       id: toastId,
     });
-    await apiCall({
-      method: 'POST',
-      url: `/notifications/sendUserApproved`,
-      body: {
-        contributorId: user._id,
-        reviewerId: currentUser._id,
-      },
-    });
+    if (notify) {
+      await apiCall({
+        method: 'POST',
+        url: `/notifications/sendUserApproved`,
+        body: {
+          contributorId: user._id,
+          reviewerId: currentUser._id,
+        },
+      });
+    }
   } else {
     toast.error(extractErrorMessage(res), {
       id: toastId,
@@ -194,6 +197,7 @@ export const rejectUser = async (
   user: BasePopulatedUser,
   currentUser: BasePopulatedUser | undefined,
   reasoning = '',
+  notify: boolean,
 ): Promise<void> => {
   if (!currentUser) {
     return;
@@ -211,15 +215,17 @@ export const rejectUser = async (
     toast.success('User approved!', {
       id: toastId,
     });
-    apiCall({
-      method: 'POST',
-      url: `/notifications/sendUserRejected`,
-      body: {
-        contributorId: user._id,
-        reviewerId: currentUser._id,
-        onboardReasoning: reasoning,
-      },
-    });
+    if (notify) {
+      apiCall({
+        method: 'POST',
+        url: `/notifications/sendUserRejected`,
+        body: {
+          contributorId: user._id,
+          reviewerId: currentUser._id,
+          onboardReasoning: reasoning,
+        },
+      });
+    }
     toast.success('User rejected');
   } else {
     toast.error(extractErrorMessage(res), {

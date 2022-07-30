@@ -6,6 +6,7 @@ import {
   Icon,
   Form,
   Message,
+  Checkbox,
 } from 'semantic-ui-react';
 import { BasePopulatedUser } from 'ssw-common';
 
@@ -34,6 +35,7 @@ export const ReviewUser: FC<ReviewUserProps> = ({
   ...rest
 }): ReactElement => {
   const [onboardReasoning, setOnboardReasoning] = useState('');
+  const [notify, setNotify] = useState(true);
   const { user: currentUser } = useAuth();
 
   return (
@@ -139,6 +141,13 @@ export const ReviewUser: FC<ReviewUserProps> = ({
                     value={onboardReasoning}
                     onChange={(e, { value }) => setOnboardReasoning(value)}
                   />
+                  <h5>
+                    <Checkbox
+                      label="Notify User through Email"
+                      defaultChecked
+                      onChange={() => setNotify(!notify)}
+                    ></Checkbox>
+                  </h5>
                 </>
               )}
             </Grid.Column>
@@ -149,12 +158,14 @@ export const ReviewUser: FC<ReviewUserProps> = ({
         <Modal.Actions className="review-user-actions">
           <PrimaryButton
             className="approve-button"
-            onClick={() => approveUser(user, currentUser)}
+            onClick={() => approveUser(user, currentUser, notify)}
             content="Approve"
           />
           <SecondaryButton
             className="decline-button"
-            onClick={() => rejectUser(user, currentUser, onboardReasoning)}
+            onClick={() =>
+              rejectUser(user, currentUser, onboardReasoning, notify)
+            }
             content="Decline"
             border
           />
