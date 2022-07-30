@@ -176,16 +176,16 @@ export const approveUser = async (
     toast.success('User approved!', {
       id: toastId,
     });
-    if (notify) {
-      await apiCall({
+
+    notify &&
+      (await apiCall({
         method: 'POST',
         url: `/notifications/sendUserApproved`,
         body: {
           contributorId: user._id,
           reviewerId: currentUser._id,
         },
-      });
-    }
+      }));
   } else {
     toast.error(extractErrorMessage(res), {
       id: toastId,
@@ -215,7 +215,7 @@ export const rejectUser = async (
     toast.success('User approved!', {
       id: toastId,
     });
-    if (notify) {
+    notify &&
       apiCall({
         method: 'POST',
         url: `/notifications/sendUserRejected`,
@@ -225,7 +225,6 @@ export const rejectUser = async (
           onboardReasoning: reasoning,
         },
       });
-    }
     toast.success('User rejected');
   } else {
     toast.error(extractErrorMessage(res), {
