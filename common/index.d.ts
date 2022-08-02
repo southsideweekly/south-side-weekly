@@ -106,6 +106,7 @@ export interface IPitch {
   layoutNotes: string;
   wordCount: number;
   pageCount: number;
+  isInternal: boolean;
 }
 
 export interface IPitchAggregate extends IPitch {
