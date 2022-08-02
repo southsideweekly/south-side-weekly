@@ -97,8 +97,16 @@ export interface IPitch {
   updatedAt: Date;
   issueStatuses: { issueId: string; issueStatus: string }[];
   editStatus: string;
+  factCheckingStatus: string;
+  factCheckingLink: string;
+  visualStatus: string;
+  visualLink: string;
+  visualNotes: string;
+  layoutStatus: string;
+  layoutNotes: string;
   wordCount: number;
   pageCount: number;
+  isInternal: boolean;
 }
 
 export interface IPitchAggregate extends IPitch {

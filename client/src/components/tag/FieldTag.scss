@@ -177,3 +177,35 @@
 .coming-late-tag-color {
   background-color: $tagOrange !important;
 }
+
+.needs-fc-tag-color,
+.fc-in-progress-tag-color,
+.not-integrated-tag-color,
+.fc-done-tag-color {
+  background-color: $tagRed !important;
+}
+
+.fc-integrated-tag-color {
+  background-color: $tagGreen !important;
+}
+
+.unassigned-tag-color,
+.re-use-illustration-tag-color,
+.uncertain-tag-color {
+  background-color: $tagRed !important;
+}
+
+.in-drive-tag-color {
+  background-color: $tagGreen !important;
+}
+
+.layout-drafted-tag-color,
+.copy-placed-tag-color,
+.visuals-placed-tag-color,
+.board-printed-tag-color {
+  background-color: $tagRed !important;
+}
+
+.finalized-tag-color {
+  background-color: $tagGreen !important;
+}
