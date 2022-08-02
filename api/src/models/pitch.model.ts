@@ -101,13 +101,13 @@ const Pitch = new mongoose.Schema(
       enum: Object.values(factCheckingStatusEnum),
       default: factCheckingStatusEnum.NEEDS_FC,
     },
-    factCheckingLink: { type: String, default: null },
+    factCheckingLink: { type: String, default: '' },
     visualStatus: {
       type: String,
       enum: Object.values(visualStatusEnum),
       default: visualStatusEnum.UNASSIGNED,
     },
-    visualLink: { type: String, default: null },
+    visualLink: { type: String, default: '' },
     visualNotes: { type: String, default: null },
     layoutStatus: {
       type: String,
