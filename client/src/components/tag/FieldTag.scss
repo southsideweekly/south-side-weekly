@@ -178,8 +178,6 @@
   background-color: $tagOrange !important;
 }
 
-// Fact Checking Status Colors
-
 .needs-fc-tag-color,
 .fc-in-progress-tag-color,
 .not-integrated-tag-color,
@@ -191,8 +189,6 @@
   background-color: $tagGreen !important;
 }
 
-// Visuals Status Colors
-
 .unassigned-tag-color,
 .re-use-illustration-tag-color,
 .uncertain-tag-color {
@@ -202,8 +198,6 @@
 .in-drive-tag-color {
   background-color: $tagGreen !important;
 }
-
-// Layout Status Colors
 
 .layout-drafted-tag-color,
 .copy-placed-tag-color,
