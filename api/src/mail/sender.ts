@@ -161,6 +161,9 @@ export const sendContributorAddedToPitchMail = async (
     },
   );
 
+  console.log(
+    `I am HERE HERE HERE sendContributorAddedToPitchMail HERE HERE LOOK AT ME`,
+  );
   await sendMail(mailOptions);
 };
 
