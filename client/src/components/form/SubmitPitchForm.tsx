@@ -6,8 +6,10 @@ import * as yup from 'yup';
 import { FormInput } from '../ui/FormInput';
 import { FormMultiSelect } from '../ui/FormMultiSelect';
 import { useAuth, useInterests } from '../../contexts';
+import { FormCheckbox } from '../ui/FormCheckbox';
 import { FormRadio } from '../ui/FormRadio';
 import { FormTextArea } from '../ui/FormTextArea';
+import { AuthView } from '../wrapper/AuthView';
 
 import './SubmitPitchForm.scss';
 
@@ -16,6 +18,7 @@ const schema = yup.object({
   assignmentGoogleDocLink: yup.string().nullable(),
   description: yup.string().required(),
   topics: yup.array().of(yup.string().required()).required().min(0),
+  isInternal: yup.boolean().required(),
   writerIntent: yup.string().nullable(),
   conflictOfInterest: yup.string().nullable().required(),
 });
@@ -23,7 +26,11 @@ const schema = yup.object({
 export interface SubmitPitchFields
   extends Pick<
     Pitch,
-    'title' | 'assignmentGoogleDocLink' | 'description' | 'topics'
+    | 'title'
+    | 'assignmentGoogleDocLink'
+    | 'description'
+    | 'topics'
+    | 'isInternal'
   > {
   writerIntent?: string;
   conflictOfInterest: string | null;
@@ -107,6 +114,16 @@ export const SubmitPitchForm: FC<FormProps> = ({
             {touched['topics'] && errors['topics'] && (
               <div className="error">{errors['topics']}</div>
             )}
+            <AuthView view="minStaff">
+              <div className="row">
+                <Field
+                  component={FormCheckbox}
+                  name="isInternal"
+                  label="Is Internal"
+                />
+              </div>
+            </AuthView>
+
             {isWriter && (
               <>
                 <div className="row">
@@ -137,7 +154,6 @@ export const SubmitPitchForm: FC<FormProps> = ({
                 )}
               </>
             )}
-
             <div className="row">
               <div>
                 <p>

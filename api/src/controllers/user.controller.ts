@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 
 import Pitch from '../models/pitch.model';
-import { onboardingStatusEnum } from '../utils/enums';
+import { onboardingStatusEnum, rolesEnum } from '../utils/enums';
 import {
   sendFail,
   sendNotFound,
@@ -359,8 +359,14 @@ export const claimPitch = async (
 export const pitches = async (req: Request, res: Response): Promise<void> => {
   const populateType = extractPopulateQuery(req.query);
   const options = extractOptions(req.query);
+  const canViewInternal =
+    req.user.role === rolesEnum.ADMIN || req.user.role === rolesEnum.STAFF;
 
-  const pitches = await PitchService.getAllUserPitches(req.params.id, options);
+  const pitches = await PitchService.getAllUserPitches(
+    canViewInternal,
+    req.params.id,
+    options,
+  );
 
   if (pitches === undefined) {
     sendNotFound(res, `User not found with id ${req.params.id}`);
