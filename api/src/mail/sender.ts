@@ -160,10 +160,6 @@ export const sendContributorAddedToPitchMail = async (
       cc: pitch.primaryEditor.email,
     },
   );
-
-  console.log(
-    `I am HERE HERE HERE sendContributorAddedToPitchMail HERE HERE LOOK AT ME`,
-  );
   await sendMail(mailOptions);
 };
 
