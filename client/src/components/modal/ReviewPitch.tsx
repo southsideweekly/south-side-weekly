@@ -164,6 +164,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
             reviewerId: user?._id,
           },
         });
+      console.log('I AM HERE CALL API');
       if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
         notify &&
           apiCall({

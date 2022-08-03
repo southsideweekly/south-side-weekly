@@ -91,6 +91,9 @@ export const sendPitchApprovedNotification = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
+  console.log(
+    'I AM HERE NOTIFICATION CONTROLLER SEND PITCH APPROVED NOTIFICATION',
+  );
   const contributorId: string = req.body.contributorId;
   const pitchId: string = req.body.pitchId;
   const reviewerId: string = req.body.reviewerId;
