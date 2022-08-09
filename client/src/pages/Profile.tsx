@@ -39,6 +39,7 @@ import Loading from '../components/ui/Loading';
 import { pitchStatusCol } from '../components/table/columns';
 import { pitchStatusEnum } from '../utils/enums';
 import { RadioFilter } from '../components/filter/RadioFilter';
+import { DelayedSearch } from '../components/search/DelayedSearch';
 
 import './Profile.scss';
 interface PitchesRes {
@@ -115,6 +116,7 @@ const Profile = (): ReactElement => {
       sortBy: params.get('sortBy'),
       orderBy: params.get('orderBy'),
       isPublished: params.get('isPublished'),
+      search: params.get('search'),
     };
 
     return _.omitBy(q, _.isNil);
@@ -408,7 +410,8 @@ const Profile = (): ReactElement => {
           <h2>{`${user.firstName}'s` + ` Contributions`}</h2>
         )}
 
-        <div className="published-filter">
+        <div className="table-filters">
+          <DelayedSearch className="search"></DelayedSearch>
           <RadioFilter
             className="published-checkbox"
             label="Published"
@@ -421,7 +424,7 @@ const Profile = (): ReactElement => {
             filterKey="isPublished"
           />
           <Checkbox
-            label="Current Pitches"
+            label="Show Current Pitches Only"
             onChange={() => setCurrentPitches(!currentPitches)}
           ></Checkbox>
         </div>

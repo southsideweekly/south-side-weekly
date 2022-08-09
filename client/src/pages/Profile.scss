@@ -3,11 +3,17 @@
     padding-left: 5% !important;
   }
 
-  .published-filter {
+  .table-filters {
     display: flex;
     flex-direction: row;
+    align-items: center;
+    vertical-align: middle;
     .published-checkbox {
       margin-right: 10px;
+    }
+    .search {
+      width: 30em;
+      margin-right: 2em;
     }
   }
 
