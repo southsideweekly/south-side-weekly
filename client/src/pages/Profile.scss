@@ -3,6 +3,14 @@
     padding-left: 5% !important;
   }
 
+  .published-filter {
+    display: flex;
+    flex-direction: row;
+    .published-checkbox {
+      margin-right: 10px;
+    }
+  }
+
   .tag-spacing {
     margin-top: 2% !important;
   }
