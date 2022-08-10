@@ -204,7 +204,7 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
 
     if (!isError(res)) {
       addNotify &&
-        apiCall({
+        (await apiCall({
           method: 'POST',
           url: '/notifications/sendContributorAdded',
           body: {
@@ -212,7 +212,7 @@ const EditingClaimCard: FC<EditingClaimCardProps> = ({
             staffId: user?._id,
             pitchId: pitchId,
           },
-        });
+        }));
       toast.success('Added editor');
     } else {
       toast.error(extractErrorMessage(res));

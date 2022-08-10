@@ -167,7 +167,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
       console.log('I AM HERE CALL API');
       if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
         notify &&
-          apiCall({
+          (await apiCall({
             method: 'POST',
             url: '/notifications/sendContributorAdded',
             body: {
@@ -175,7 +175,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
               staffId: user?._id,
               pitchId: pitch?._id,
             },
-          });
+          }));
       }
       toast.success('Pitch approved');
       setOpen(false);

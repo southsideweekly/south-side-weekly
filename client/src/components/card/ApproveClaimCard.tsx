@@ -102,7 +102,7 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
 
       if (!isError(res)) {
         addNotify &&
-          apiCall({
+          (await apiCall({
             method: 'POST',
             url: '/notifications/sendContributorAdded',
             body: {
@@ -110,7 +110,7 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
               staffId: user?._id,
               pitchId: pitchId,
             },
-          });
+          }));
         toast.success('Added contributor');
         setSelectContributorMode(false);
       } else {
