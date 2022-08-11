@@ -10,6 +10,7 @@ const Issue = new mongoose.Schema({
   releaseDate: { type: String, default: null, required: true },
   pitches: [{ type: Schema.Types.ObjectId, ref: 'Pitch' }],
   type: { type: String, enum: Object.values(issueTypeEnum), required: true },
+  isDeleted: { type: Boolean, default: false, required: true },
 });
 
 export default mongoose.model<IssueSchema>('Issue', Issue);

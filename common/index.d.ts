@@ -107,6 +107,7 @@ export interface IPitch {
   wordCount: number;
   pageCount: number;
   isInternal: boolean;
+  isDeleted: boolean;
 }
 
 export interface IPitchAggregate extends IPitch {
@@ -175,6 +176,7 @@ export interface IIssue {
   releaseDate: string;
   pitches: string[];
   type: string;
+  isDeleted: boolean;
 }
 
 type BaseIssueOmitFields = 'pitches';

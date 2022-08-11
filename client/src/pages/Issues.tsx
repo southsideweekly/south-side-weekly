@@ -6,6 +6,7 @@ import { useQueryParams, NumberParam } from 'use-query-params';
 import { isError, apiCall } from '../api';
 import { Kanban } from '../components';
 import AddIssueModal from '../components/modal/AddIssue';
+import EditIssueModal from '../components/modal/EditIssueModal';
 import { SubmitPitchModal } from '../components/modal/SubmitPitchModal';
 import { SingleSelect } from '../components/select/SingleSelect';
 import Loading from '../components/ui/Loading';
@@ -112,6 +113,9 @@ const Issues = (): ReactElement => {
             onClick={() => setViewIssueIndex(viewIssueIndex + 1)}
           />
         </div>
+        {isAdmin && (
+          <EditIssueModal issue={issues[viewIssueIndex]}></EditIssueModal>
+        )}
         {isAdmin && <AddIssueModal callback={void 0} onUnmount={fetchIssues} />}
         <SubmitPitchModal />
       </div>
