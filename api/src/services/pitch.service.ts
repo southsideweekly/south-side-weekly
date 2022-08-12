@@ -207,6 +207,7 @@ const paginate = async (
     isPublishedFilter(filters['isPublished']),
     claimStatusFilter(filters['claimStatus']),
     searchFilter(search),
+    { isDeleted: false },
   );
 
   const pitches = await Pitch.find(mergedFilters)
@@ -256,7 +257,7 @@ export const getOne = async (_id: string): Pitch =>
 
 export const getAll = async (
   options?: PaginateOptions<PitchSchema>,
-): Promise<PitchesResponse> => await paginate({}, options);
+): Promise<PitchesResponse> => await paginate(options);
 
 export const getPendingPitches = async (
   options?: PaginateOptions<PitchSchema>,
@@ -269,7 +270,10 @@ export const getApprovedPitches = async (
 ): Promise<PitchesResponse> =>
   await paginate(
     !canViewInternal
-      ? { status: pitchStatusEnum.APPROVED, isInternal: false }
+      ? {
+          status: pitchStatusEnum.APPROVED,
+          isInternal: false,
+        }
       : { status: pitchStatusEnum.APPROVED },
     options,
   );
