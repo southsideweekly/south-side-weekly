@@ -19,6 +19,7 @@ const Issues = (): ReactElement => {
   const [issues, setIssues] = useState<PopulatedIssue[] | null>(null);
   const [viewIssueIndex, setViewIssueIndex] = useState<number>(0);
   const [query, setQuery] = useQueryParams({ index: NumberParam });
+  const [issueChanged, setIssueChanged] = useState(false);
   const { isAdmin } = useAuth();
 
   const fetchIssues = useCallback(async (): Promise<void> => {
@@ -44,7 +45,11 @@ const Issues = (): ReactElement => {
           closestIssueIndex < 0 ? allIssues.length - 1 : closestIssueIndex,
         );
       } else {
-        setViewIssueIndex(query.index || 0);
+        if (query.index || 0 >= allIssues.length) {
+          setViewIssueIndex(allIssues.length - 1);
+        } else {
+          setViewIssueIndex(query.index || 0);
+        }
       }
 
       setIssues(allIssues);
@@ -55,7 +60,9 @@ const Issues = (): ReactElement => {
 
   useEffect(() => {
     fetchIssues();
-  }, [fetchIssues]);
+  }, [fetchIssues, issueChanged]);
+
+  const updateFunction = (): void => setIssueChanged(!issueChanged);
 
   if (!issues) {
     return <Loading open />;
@@ -114,7 +121,10 @@ const Issues = (): ReactElement => {
           />
         </div>
         {isAdmin && (
-          <EditIssueModal issue={issues[viewIssueIndex]}></EditIssueModal>
+          <EditIssueModal
+            issue={issues[viewIssueIndex]}
+            updateFunction={updateFunction}
+          ></EditIssueModal>
         )}
         {isAdmin && <AddIssueModal callback={void 0} onUnmount={fetchIssues} />}
         <SubmitPitchModal />

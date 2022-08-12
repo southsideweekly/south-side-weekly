@@ -20,6 +20,7 @@ import './modals.scss';
 
 interface EditIssueProps extends ModalProps {
   issue: PopulatedIssue;
+  updateFunction: () => void;
 }
 
 const defaultData: FormData = {
@@ -32,6 +33,7 @@ type FormData = Pick<IIssue, 'releaseDate' | 'type' | 'isDeleted'>;
 
 const EditIssueModal: FC<EditIssueProps> = ({
   issue,
+  updateFunction,
   ...rest
 }): ReactElement => {
   const [isOpen, setIsOpen] = useState(false);
@@ -52,6 +54,7 @@ const EditIssueModal: FC<EditIssueProps> = ({
 
     if (!isError(res)) {
       toast.success('Successfully updated current issue!');
+      updateFunction();
       setIsOpen(false);
     } else if (res.error.response.status === 409) {
       toast.error('Issue with this date and type already exists');
@@ -75,6 +78,7 @@ const EditIssueModal: FC<EditIssueProps> = ({
 
     if (!isError(res)) {
       toast.success('Successfully deleted current issue!');
+      updateFunction();
       setIsOpen(false);
     } else if (res.error.response.status === 409) {
       toast.error('Issue with this date and type already exists');
