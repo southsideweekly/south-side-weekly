@@ -57,7 +57,7 @@ export const add = async (payload: Partial<IIssue>): Issue => {
 };
 
 export const getOne = async (_id: string): Issue =>
-  await Issue.findById({ _id }).lean();
+  await Issue.findOne({ _id: _id, isDeleted: false }).lean();
 
 export const getAll = async (
   options?: PaginateOptions<IssueSchema>,

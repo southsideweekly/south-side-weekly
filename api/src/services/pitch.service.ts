@@ -253,7 +253,7 @@ export const add = async (payload: Partial<PitchType>): Pitch => {
 };
 
 export const getOne = async (_id: string): Pitch =>
-  await Pitch.findById({ _id }).lean();
+  await Pitch.findOne({ _id: _id, isDeleted: false }).lean();
 
 export const getAll = async (
   options?: PaginateOptions<PitchSchema>,
@@ -324,6 +324,7 @@ export const getPitchesInIssue = async (
 ): Promise<PitchesResponse> => {
   const pitches = await Pitch.find({
     _id: { $in: issuePitchIds },
+    isDeleted: false,
   }).lean();
 
   return { data: pitches, count: pitches.length };
