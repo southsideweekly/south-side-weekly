@@ -13,9 +13,15 @@ import {
   Team,
   User,
 } from 'ssw-common';
-import { Grid, Pagination, Rating, SemanticWIDTHS } from 'semantic-ui-react';
+import {
+  Checkbox,
+  Grid,
+  Pagination,
+  Rating,
+  SemanticWIDTHS,
+} from 'semantic-ui-react';
 import _ from 'lodash';
-import { StringParam, useQueryParams } from 'use-query-params';
+import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
 import { loadFullUser, loadUserPermissions } from '../api/apiWrapper';
 import { FieldTag, UserPicture } from '../components';
@@ -32,9 +38,10 @@ import { parseOptionsSelect } from '../utils/helpers';
 import Loading from '../components/ui/Loading';
 import { pitchStatusCol } from '../components/table/columns';
 import { pitchStatusEnum } from '../utils/enums';
+import { RadioFilter } from '../components/filter/RadioFilter';
+import { DelayedSearch } from '../components/search/DelayedSearch';
 
 import './Profile.scss';
-
 interface PitchesRes {
   data: BasePopulatedPitch[];
   count: number;
@@ -54,10 +61,12 @@ const Profile = (): ReactElement => {
     offset: StringParam,
     f_limit: StringParam,
     f_offset: StringParam,
+    isPublished: BooleanParam,
   });
   const [user, setUser] = useState<BasePopulatedUser>();
   const [pitchesData, setPitchesData] = useState<PitchesRes>();
   const [feedbackData, setFeedbackData] = useState<FeedbackRes>();
+  const [currentPitches, setCurrentPitches] = useState(false);
 
   const location = useLocation();
   const history = useHistory();
@@ -106,6 +115,8 @@ const Profile = (): ReactElement => {
       offset: params.get('offset') || '0',
       sortBy: params.get('sortBy'),
       orderBy: params.get('orderBy'),
+      isPublished: params.get('isPublished'),
+      search: params.get('search'),
     };
 
     return _.omitBy(q, _.isNil);
@@ -143,12 +154,19 @@ const Profile = (): ReactElement => {
 
   useEffect(() => {
     const loadPitches = async (): Promise<void> => {
-      const res = await apiCall<PitchesRes>({
-        url: `/users/${user?._id}/pitches`,
-        method: 'GET',
-        populate: 'default',
-        query: queryParams,
-      });
+      const res = currentPitches
+        ? await apiCall<PitchesRes>({
+            url: `/users/${user?._id}/currentPitches`,
+            method: 'GET',
+            populate: 'default',
+            query: queryParams,
+          })
+        : await apiCall<PitchesRes>({
+            url: `/users/${user?._id}/pitches`,
+            method: 'GET',
+            populate: 'default',
+            query: queryParams,
+          });
 
       if (!isError(res)) {
         setPitchesData(res.data.result);
@@ -158,9 +176,8 @@ const Profile = (): ReactElement => {
     if (!user) {
       return;
     }
-
     loadPitches();
-  }, [queryParams, user]);
+  }, [queryParams, user, currentPitches]);
 
   useEffect(() => {
     const loadFeedback = async (): Promise<void> => {
@@ -392,6 +409,25 @@ const Profile = (): ReactElement => {
         ) : (
           <h2>{`${user.firstName}'s` + ` Contributions`}</h2>
         )}
+
+        <div className="table-filters">
+          <DelayedSearch className="search"></DelayedSearch>
+          <RadioFilter
+            className="published-checkbox"
+            label="Published"
+            filterKey="isPublished"
+          />
+          <RadioFilter
+            className="published-checkbox"
+            label="Not Published"
+            value="false"
+            filterKey="isPublished"
+          />
+          <Checkbox
+            label="Show Current Pitches Only"
+            onChange={() => setCurrentPitches(!currentPitches)}
+          ></Checkbox>
+        </div>
 
         <PaginatedTable
           columns={cols}

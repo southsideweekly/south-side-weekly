@@ -45,7 +45,7 @@ export const PaginatedTable = <T,>({
   return (
     <div>
       <div style={{ display: 'flex', marginTop: '20px', alignItems: 'center' }}>
-        <span>Records per page: </span>
+        <span style={{ marginRight: '2px' }}>Records per page: </span>
         <SingleSelect
           value={query.limit || '10'}
           options={parseOptionsSelect(pageOptions)}
@@ -53,7 +53,7 @@ export const PaginatedTable = <T,>({
           placeholder="Limit"
         />
         <br />
-        <div>
+        <div style={{ marginLeft: '1em' }}>
           <p>Total count: {count}</p>
         </div>
       </div>
