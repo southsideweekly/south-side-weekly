@@ -37,6 +37,7 @@ import { InternalDisplay } from '../ui/InternalDisplay';
 import { AuthView } from '../wrapper/AuthView';
 import './ReviewClaimForm.scss';
 import { FormCheckbox } from '../ui/FormCheckbox';
+import DeletePitchButton from '../ui/DeletePitchButton';
 
 interface FormProps {
   pitch: FullPopulatedPitch | null;
@@ -539,6 +540,7 @@ export const ReviewClaimForm: FC<FormProps> = ({
             </div>
             {editMode && (
               <div className="row right">
+                <DeletePitchButton pitch={pitch}></DeletePitchButton>
                 <Button
                   content="Cancel"
                   onClick={() => {

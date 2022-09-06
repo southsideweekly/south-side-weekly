@@ -207,6 +207,7 @@ const paginate = async (
     isPublishedFilter(filters['isPublished']),
     claimStatusFilter(filters['claimStatus']),
     searchFilter(search),
+    { isDeleted: false },
   );
 
   const pitches = await Pitch.find(mergedFilters)
@@ -252,11 +253,11 @@ export const add = async (payload: Partial<PitchType>): Pitch => {
 };
 
 export const getOne = async (_id: string): Pitch =>
-  await Pitch.findById({ _id }).lean();
+  await Pitch.findOne({ _id: _id, isDeleted: false }).lean();
 
 export const getAll = async (
   options?: PaginateOptions<PitchSchema>,
-): Promise<PitchesResponse> => await paginate({}, options);
+): Promise<PitchesResponse> => await paginate(options);
 
 export const getPendingPitches = async (
   options?: PaginateOptions<PitchSchema>,
@@ -269,7 +270,10 @@ export const getApprovedPitches = async (
 ): Promise<PitchesResponse> =>
   await paginate(
     !canViewInternal
-      ? { status: pitchStatusEnum.APPROVED, isInternal: false }
+      ? {
+          status: pitchStatusEnum.APPROVED,
+          isInternal: false,
+        }
       : { status: pitchStatusEnum.APPROVED },
     options,
   );
@@ -320,6 +324,7 @@ export const getPitchesInIssue = async (
 ): Promise<PitchesResponse> => {
   const pitches = await Pitch.find({
     _id: { $in: issuePitchIds },
+    isDeleted: false,
   }).lean();
 
   return { data: pitches, count: pitches.length };
