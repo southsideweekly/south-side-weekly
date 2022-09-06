@@ -99,7 +99,7 @@ export const UsersRecords: FC<TableProps> = ({
             size="mini"
             onClick={async (e) => {
               e.stopPropagation();
-              await approveUser(user, currentUser);
+              await approveUser(user, currentUser, true);
               if (onModalClose) {
                 onModalClose();
               }
@@ -110,7 +110,7 @@ export const UsersRecords: FC<TableProps> = ({
             size="mini"
             onClick={async (e) => {
               e.stopPropagation();
-              await rejectUser(user, currentUser);
+              await rejectUser(user, currentUser, '', true);
               if (onModalClose) {
                 onModalClose();
               }

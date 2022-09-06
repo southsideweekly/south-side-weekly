@@ -6,7 +6,15 @@ import React, {
   useState,
 } from 'react';
 import toast from 'react-hot-toast';
-import { Button, Divider, Icon, Input, Label, Popup } from 'semantic-ui-react';
+import {
+  Button,
+  Checkbox,
+  Divider,
+  Icon,
+  Input,
+  Label,
+  Popup,
+} from 'semantic-ui-react';
 import { Team, User, UserFields } from 'ssw-common';
 import Swal from 'sweetalert2';
 
@@ -56,6 +64,8 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
   const [editTargetMode, setEditTargetMode] = useState(false);
 
   const [totalPositions, setTotalPositions] = useState(0);
+  const [claimNotify, setClaimNotify] = useState(true);
+  const [addNotify, setAddNotify] = useState(true);
 
   const addContributor = async (): Promise<void> => {
     if (selectedContributor) {
@@ -91,15 +101,16 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
       });
 
       if (!isError(res)) {
-        apiCall({
-          method: 'POST',
-          url: '/notifications/sendContributorAdded',
-          body: {
-            contributorId: selectedContributor,
-            staffId: user?._id,
-            pitchId: pitchId,
-          },
-        });
+        addNotify &&
+          (await apiCall({
+            method: 'POST',
+            url: '/notifications/sendContributorAdded',
+            body: {
+              contributorId: selectedContributor,
+              staffId: user?._id,
+              pitchId: pitchId,
+            },
+          }));
         toast.success('Added contributor');
         setSelectContributorMode(false);
       } else {
@@ -148,16 +159,17 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendClaimRequestApproved',
-        body: {
-          contributorId: userId,
-          pitchId: pitchId,
-          staffId: user?._id,
-          teamId: team._id,
-        },
-      });
+      claimNotify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendClaimRequestApproved',
+          body: {
+            contributorId: userId,
+            pitchId: pitchId,
+            staffId: user?._id,
+            teamId: team._id,
+          },
+        });
       toast.success('Approved contributor claim');
     } else {
       toast.error(extractErrorMessage(res));
@@ -178,15 +190,16 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendClaimRequestDeclined',
-        body: {
-          contributorId: userId,
-          pitchId: pitchId,
-          staffId: user?._id,
-        },
-      });
+      claimNotify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendClaimRequestDeclined',
+          body: {
+            contributorId: userId,
+            pitchId: pitchId,
+            staffId: user?._id,
+          },
+        });
       toast.success('Declined contributor claim');
     } else {
       toast.error(extractErrorMessage(res));
@@ -234,6 +247,12 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
             className="select-contributor"
           />
           <div>
+            <Checkbox
+              label="Notify Users"
+              className="notify-button"
+              defaultChecked
+              onChange={() => setAddNotify(!addNotify)}
+            ></Checkbox>
             <Button
               content="Add"
               positive
@@ -400,6 +419,11 @@ const ApproveClaimCard: FC<ApproveClaimCardProps> = ({
               {!notApproved && (
                 <AuthView view="minStaff">
                   <div className="button-group">
+                    <Checkbox
+                      label="Notify Users"
+                      onChange={() => setClaimNotify(!claimNotify)}
+                      defaultChecked
+                    ></Checkbox>
                     <Button
                       content="Approve"
                       positive

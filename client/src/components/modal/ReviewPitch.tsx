@@ -1,5 +1,12 @@
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
-import { Icon, Input, Message, Modal, ModalProps } from 'semantic-ui-react';
+import {
+  FormCheckbox,
+  Icon,
+  Input,
+  Message,
+  Modal,
+  ModalProps,
+} from 'semantic-ui-react';
 import { BasePopulatedPitch, BasePopulatedUser } from 'ssw-common';
 import cn from 'classnames';
 import toast from 'react-hot-toast';
@@ -64,6 +71,7 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
   const [reasoning, setReasoning] = useState('');
   const [wordCount, setWordCount] = useState(0);
   const [pageCount, setPageCount] = useState(0);
+  const [notify, setNotify] = useState(true);
 
   useEffect(() => {
     const loadData = async (): Promise<void> => {
@@ -146,25 +154,27 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendPitchApproved',
-        body: {
-          contributorId: pitch?.author._id,
-          pitchId: pitch?._id,
-          reviewerId: user?._id,
-        },
-      });
-      if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
+      notify &&
         apiCall({
           method: 'POST',
-          url: '/notifications/sendContributorAdded',
+          url: '/notifications/sendPitchApproved',
           body: {
-            contributorId: pitchData.writer,
-            staffId: user?._id,
+            contributorId: pitch?.author._id,
             pitchId: pitch?._id,
+            reviewerId: user?._id,
           },
         });
+      if (pitchData.writer && pitchData.writer !== pitch?.author._id) {
+        notify &&
+          (await apiCall({
+            method: 'POST',
+            url: '/notifications/sendContributorAdded',
+            body: {
+              contributorId: pitchData.writer,
+              staffId: user?._id,
+              pitchId: pitch?._id,
+            },
+          }));
       }
       toast.success('Pitch approved');
       setOpen(false);
@@ -184,16 +194,17 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
     });
 
     if (!isError(res)) {
-      apiCall({
-        method: 'POST',
-        url: '/notifications/sendPitchDeclined',
-        body: {
-          contributorId: pitch?.author._id,
-          staffId: user?._id,
-          pitchId: pitch?._id,
-          reasoning: reasoning,
-        },
-      });
+      notify &&
+        apiCall({
+          method: 'POST',
+          url: '/notifications/sendPitchDeclined',
+          body: {
+            contributorId: pitch?.author._id,
+            staffId: user?._id,
+            pitchId: pitch?._id,
+            reasoning: reasoning,
+          },
+        });
 
       toast.success('Pitch declined');
       setOpen(false);
@@ -461,6 +472,17 @@ export const ReviewPitch: FC<ReviewPitchProps> = ({
             value={reasoning}
             onChange={(e, { value }) => setReasoning(value)}
           />
+        </div>
+        <div className="section">
+          <p>
+            <b>
+              <FormCheckbox
+                label="Notify User(s) through Email"
+                defaultChecked
+                onChange={() => setNotify(!notify)}
+              />
+            </b>
+          </p>
         </div>
       </Modal.Content>
       <Modal.Actions>

@@ -74,6 +74,10 @@
     align-items: center !important;
     margin-bottom: 1rem !important;
 
+    .notify-button {
+      margin-right: 1rem;
+    }
+
     .select-contributor {
       width: auto !important;
     }
@@ -129,6 +133,8 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        justify-content: flex-start;
+        align-items: center;
 
         .button {
           margin: 0px 0px 0px 20px !important;

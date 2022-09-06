@@ -160,7 +160,6 @@ export const sendContributorAddedToPitchMail = async (
       cc: pitch.primaryEditor.email,
     },
   );
-
   await sendMail(mailOptions);
 };
 
@@ -178,7 +177,7 @@ export const sendClaimRequestDeclinedMail = async (
 
   const mailOptions = buildSendMailOptions(
     contributor.email,
-    `Story Claim Request for “${pitch.title} Declined`,
+    `Story Claim Request for “${pitch.title}" Declined`,
     'claimRequestDeclined.html',
     templateValues,
   );
