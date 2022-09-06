@@ -7,7 +7,6 @@ import transporter from './transporter';
 import { buildContributorHtml, buildSendMailOptions } from './utils';
 
 export const sendMail = async (mailOptions: SendMailOptions): Promise<void> => {
-  console.log('I AM HERE SEND MAIL');
   const mailDelivered = new Promise((resolve, reject) => {
     transporter.sendMail(mailOptions, (err, info) => {
       err ? reject(err) : resolve(info);
@@ -93,7 +92,6 @@ export const sendApprovedPitchMail = async (
   pitch: BasePopulatedPitch,
   hasWriter: boolean,
 ): Promise<void> => {
-  console.log('I AM HERE NOTIFICATION CONTROLLER SEND APPROVED PITCH MAIL');
   const templateValues = {
     contributor: contributor.fullname,
     pitch: pitch.title,
